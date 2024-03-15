@@ -4,8 +4,6 @@ and spits out a pair of angles in radians that are converted into degrees by int
 
 
 TODO:
-convert radians to degrees int the IK() funtion
-
 motion planner 
 
 servo control
