@@ -1,5 +1,4 @@
-This code is a IK solver for a 2 degree of freedom robot arm, the important part is the funtion IK(), as it is right now this funtion takes in X and Y coordinates 
-and spits out a pair of angles in degrees. this is still in progress and will improve overtime
+This code is a IK solver for a 2 degree of freedom robot arm, the important part is the funtion IK(), as it is right now this funtion takes in X and Y coordinates and spits out a pair of angles in degrees. this is still in progress and will improve overtime
 
 
 
