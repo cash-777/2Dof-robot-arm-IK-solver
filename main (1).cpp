@@ -1,5 +1,14 @@
+
 #include <iostream>
 #include <cmath>
+#include <string>
+
+
+
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 void printPair(const std::pair<double, double>& p) {
     std::cout << "(" << p.first << ", " << p.second << ")";
@@ -43,10 +52,24 @@ void performIK(double x, double y) {
 }
 
 int main() {
-    double x = 4.0; // End effector x-coordinate
-    double y = 1.0; // End effector y-coordinate
+    std::string userInput = "";
+   std::getline(std::cin, userInput);
+   
 
-    performIK(x, y);
+// point command: returns coordinates of a single point: to use type " point (Xint,Yint)." TODO:add error messages
+   if(userInput.substr(0, 2) == "point") {
+    double x, y;
+    //read coordinates
 
+     if (std::sscanf(userInput.c_str(), "LB (%lf,%lf)", &x, &y) == 2) {
+
+        performIK(x,y);
+     }
+   }
+
+
+
+
+    
     return 0;
 }
