@@ -5,6 +5,10 @@ This code is a IK solver for a 2 degree of freedom robot arm, the important part
 TODO:
 motion planner 
 
+real time control
+
+more commands
+
 ardunio code
 
 servo control
@@ -17,4 +21,6 @@ To use:
 
 2.set the x and y coordinates of your desired end effector location line 32 and 33
 
+Commands:
 
+point: provides arm angles for the desired X,Y coordinates. use  point (Xint,Yint)
