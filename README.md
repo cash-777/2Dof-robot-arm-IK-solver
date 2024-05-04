@@ -11,9 +11,6 @@ more commands
 
 ardunio code
 
-servo control
-
-
 
 To use: 
 
