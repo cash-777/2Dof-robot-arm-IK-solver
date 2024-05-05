@@ -5,8 +5,8 @@
 Servo armServo1;
 Servo armServo2;
 
-const double L1 = 7.5; // Length of link 1
-const double L2 = 7.5;  // Length of link 2
+const double L1 = 50; // Length of link 1
+const double L2 = 50;  // Length of link 2
 
 double IK_x, IK_y;
 
@@ -33,10 +33,16 @@ void IK(double x, double y, double &angle1, double &angle2) {
 }
 
 void setup() {
+
+  
     // Initialize serial communication
     Serial.begin(9600);
   //attach servo objects to desired pin (need to use a PWM pin)
     armServo1.attach(9);
+    armServo2.attach(10);
+
+    armServo1.write(180);
+    armServo2.write(180);
 }
 
 void loop() {
