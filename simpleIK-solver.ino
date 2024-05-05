@@ -1,25 +1,23 @@
 #include <Servo.h>
 #include <math.h>
 
-
+// Servo name setup
 Servo armServo1;
 Servo armServo2;
 
-int pos1 = 0;
-int pos2 = 0;
-
-const double L1 = 10.0; // Length of link 1
-const double L2 = 7.0;  // Length of link 2
+const double L1 = 7.5; // Length of link 1
+const double L2 = 7.5;  // Length of link 2
 
 double IK_x, IK_y;
 
-double IK(double x, double y) {
+// Calculates IK
+void IK(double x, double y, double &angle1, double &angle2) {
     double r = sqrt(x * x + y * y);
 
     // Check if the end effector coordinates are reachable
     if (r > L1 + L2) {
         Serial.println("End effector coordinates are outside the reachable workspace");
-        return 0.0;
+        return;
     }
 
     double phi = atan2(y, x);
@@ -30,32 +28,39 @@ double IK(double x, double y) {
     double beta = acos(min((L1 * L1 + L2 * L2 - r * r) / (2 * L1 * L2), 1.0));
     double theta2 = M_PI - beta;
 
-    return theta1;
-}
-
-double performIK(double x, double y) {
-    return IK(x, y);
+    angle1 = (double)(theta1 * 180.0 / M_PI);
+    angle2 = (double)(theta2 * 180.0 / M_PI);
 }
 
 void setup() {
-    armServo1.attach(9); // Attach servo 1 to pin 9
-    armServo2.attach(10); // Attach servo 2 to pin 10
-
-    Serial.begin(9600); // Initialize serial communication
+    // Initialize serial communication
+    Serial.begin(9600);
+  //attach servo objects to desired pin (need to use a PWM pin)
+    armServo1.attach(9);
 }
 
 void loop() {
     if (Serial.available() > 0) {
-        String userInput = Serial.readStringUntil('\n');
+        String command = Serial.readStringUntil('\n');
+        if (command.startsWith("point(") && command.endsWith(")")) {
+            // Extracting x and y coordinates from the command
+            int commaIndex = command.indexOf(',');
+            int endIndex = command.indexOf(')');
+            if (commaIndex != -1 && endIndex != -1) {
+                String x_str = command.substring(6, commaIndex);
+                String y_str = command.substring(commaIndex + 1, endIndex);
+                double x = x_str.toDouble();
+                double y = y_str.toDouble();
+                double servo1_angle, servo2_angle;
+                IK(x, y, servo1_angle, servo2_angle);
 
-        if (userInput.substring(0, 5) == "point") {
-            double x, y;
-            // Read coordinates
-            if (sscanf(userInput.c_str(), "point (%lf,%lf)", &x, &y) == 2) {
-                double angle = performIK(x, y);
-                armServo1.write(angle);
-                armServo2.write(angle);
+               armServo1.write(servo1_angle);
+               armServo2.write(servo2_angle);
+            } else {
+                Serial.println("Invalid command format");
             }
+        } else {
+            Serial.println("Invalid command");
         }
     }
 }
